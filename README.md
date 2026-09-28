@@ -12,3 +12,7 @@ Features:
 - Edit Task
 - Delete Task
 - Update Status
+
+![Dashboard](1.png)
+
+![Dashboard](2.png)

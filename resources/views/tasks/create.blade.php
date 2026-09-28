@@ -1,138 +1,80 @@
 @extends('layouts.app')
 
+@section('title', 'Add Task | Personal Task Manager')
+
 @section('content')
-
-<div class="topbar">
-
-    <div>
-        <div class="page-title">
-            Add Task
-        </div>
-
-        <div class="page-subtitle">
-            Create a new task.
-        </div>
-    </div>
-
-</div>
-
-<style>
-
-    .form-card {
-        background: white;
-        border: 1px solid #eee;
-        border-radius: 14px;
-        padding: 30px;
-        max-width: 800px;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    label {
-        display: block;
-        font-size: 13px;
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
-
-    input,
-    textarea,
-    select {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 9px;
-        font-family: inherit;
-        font-size: 14px;
-        outline: none;
-    }
-
-    input:focus,
-    textarea:focus,
-    select:focus {
-        border-color: #e93f1a;
-    }
-
-    textarea {
-        min-height: 120px;
-        resize: vertical;
-    }
-
-    .save-button {
-        background: #e93f1a;
-        color: white;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 9px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .cancel-button {
-        background: #bcc4f2;
-        color: #222;
-        padding: 12px 20px;
-        border-radius: 9px;
-        font-weight: bold;
-        margin-left: 8px;
-    }
-
-    .error {
-        color: #d63232;
-        font-size: 12px;
-        margin-top: 5px;
-    }
-
-</style>
 
 <div class="form-card">
 
-    <form method="POST" action="{{ route('tasks.store') }}">
+    <h2>
+        Add New Task
+    </h2>
+
+    @if($errors->any())
+
+        @foreach($errors->all() as $error)
+
+            <div class="error">
+                {{ $error }}
+            </div>
+
+        @endforeach
+
+    @endif
+
+
+    <form action="{{ route('tasks.store') }}" method="POST">
 
         @csrf
 
+
         <div class="form-group">
 
-            <label>
+            <label for="task_name">
                 Task Name
             </label>
 
             <input
                 type="text"
+                id="task_name"
                 name="task_name"
                 value="{{ old('task_name') }}"
+                class="form-control"
                 placeholder="Enter task name"
                 required
             >
 
-            @error('task_name')
-                <div class="error">{{ $message }}</div>
-            @enderror
-
         </div>
+
 
         <div class="form-group">
 
-            <label>
+            <label for="description">
                 Description
             </label>
 
             <textarea
+                id="description"
                 name="description"
-                placeholder="Describe your task..."
+                class="form-control"
+                placeholder="Enter task description"
             >{{ old('description') }}</textarea>
 
         </div>
 
+
         <div class="form-group">
 
-            <label>
+            <label for="status">
                 Status
             </label>
 
-            <select name="status">
+            <select
+                id="status"
+                name="status"
+                class="form-control"
+                required
+            >
 
                 <option value="Pending">
                     Pending
@@ -146,27 +88,45 @@
 
         </div>
 
+
         <div class="form-group">
 
-            <label>
+            <label for="due_date">
                 Due Date
             </label>
 
             <input
                 type="date"
+                id="due_date"
                 name="due_date"
                 value="{{ old('due_date') }}"
+                class="form-control"
             >
 
         </div>
 
-        <button type="submit" class="save-button">
-            Save Task
-        </button>
 
-        <a href="{{ route('tasks.index') }}" class="cancel-button">
-            Cancel
-        </a>
+        <div class="form-buttons">
+
+            <a
+                href="{{ route('tasks.index') }}"
+                class="btn btn-secondary"
+            >
+                Cancel
+            </a>
+
+            <div class="form-buttons-right">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Create Task
+                </button>
+
+            </div>
+
+        </div>
 
     </form>
 

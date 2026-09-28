@@ -1,245 +1,277 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{{ $title ?? 'Personal Task Manager' }}</title>
+<title>@yield('title', 'Personal Task Manager')</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f7f7f9;
-            color: #252525;
-        }
+    body {
+        font-family: Arial, sans-serif;
+        background: #e5e7eb;
+        color: #1f2937;
+    }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+    /* Navbar */
 
-        .app {
-            display: flex;
-            min-height: 100vh;
-        }
+    .navbar {
+        background: #3f444b;
+        color: white;
+        padding: 18px 7%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        /* SIDEBAR */
+    .logo {
+        font-size: 21px;
+        font-weight: bold;
+    }
 
-        .sidebar {
-            width: 250px;
-            min-height: 100vh;
-            background: white;
-            border-right: 1px solid #e8e8e8;
-            padding: 25px 18px;
-            position: fixed;
-            left: 0;
-            top: 0;
-        }
+    .nav-link {
+        color: #f9fafb;
+        text-decoration: none;
+        margin-left: 20px;
+        font-size: 14px;
+    }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px;
-            margin-bottom: 35px;
-        }
+    .nav-link:hover {
+        color: #93c5fd;
+    }
 
-        .logo-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            background: #e93f1a;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-        }
+    /* Container */
 
-        .logo-text {
-            font-size: 18px;
-            font-weight: bold;
-        }
+    .container {
+        width: 86%;
+        max-width: 1200px;
+        margin: 35px auto;
+    }
 
-        .menu-title {
-            font-size: 11px;
-            font-weight: bold;
-            color: #999;
-            text-transform: uppercase;
-            padding: 0 12px;
-            margin-bottom: 10px;
-        }
+    /* Alert */
 
-        .nav {
-            display: flex;
+    .alert {
+        background: #dcfce7;
+        color: #166534;
+        padding: 13px 17px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: 1px solid #bbf7d0;
+    }
+
+    /* Buttons */
+
+    .btn {
+        display: inline-block;
+        padding: 10px 17px;
+        border-radius: 8px;
+        border: none;
+        text-decoration: none;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    /* Primary: Blue */
+
+    .btn-primary {
+        background: #2563eb;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #1d4ed8;
+    }
+
+    /* Edit: Light Blue */
+
+    .btn-edit {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+
+    .btn-edit:hover {
+        background: #bfdbfe;
+    }
+
+    /* Delete: Red */
+
+    .btn-delete {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .btn-delete:hover {
+        background: #fecaca;
+    }
+
+    /* Secondary: Grey */
+
+    .btn-secondary {
+        background: #e5e7eb;
+        color: #374151;
+    }
+
+    .btn-secondary:hover {
+        background: #d1d5db;
+    }
+
+    /* Forms */
+
+    .form-card {
+        max-width: 700px;
+        background: white;
+        padding: 30px;
+        margin: auto;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .form-card h2 {
+        color: #374151;
+        margin-bottom: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 7px;
+        font-weight: bold;
+        color: #374151;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 11px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 14px;
+        background: white;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px #dbeafe;
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .error {
+        color: #dc2626;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    /* Form Buttons */
+
+    .form-buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 25px;
+        gap: 10px;
+    }
+
+    .form-buttons-right {
+        display: flex;
+        gap: 8px;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 700px) {
+
+        .navbar {
+            padding: 18px 5%;
             flex-direction: column;
-            gap: 6px;
-        }
-
-        .nav a {
-            display: flex;
-            align-items: center;
             gap: 12px;
-            padding: 13px 14px;
-            border-radius: 10px;
-            font-size: 14px;
-            color: #666;
-            transition: 0.2s;
+            align-items: flex-start;
         }
 
-        .nav a:hover {
-            background: #f1f2ff;
-            color: #e93f1a;
+        .nav-link {
+            margin-left: 0;
+            margin-right: 15px;
         }
 
-        .nav a.active {
-            background: #bcc4f2;
-            color: #222;
-            font-weight: bold;
+        .container {
+            width: 92%;
+            margin: 25px auto;
         }
 
-        .nav-icon {
-            width: 22px;
+        .form-buttons {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .form-buttons-right {
+            flex-direction: column;
+        }
+
+        .form-buttons .btn {
             text-align: center;
         }
+    }
+</style>
 
-        /* MAIN */
 
-        .main {
-            margin-left: 250px;
-            width: calc(100% - 250px);
-            min-height: 100vh;
-            padding: 35px;
-        }
-
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .page-title {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .page-subtitle {
-            color: #777;
-            margin-top: 5px;
-            font-size: 14px;
-        }
-
-        .add-button {
-            background: #e93f1a;
-            color: white;
-            padding: 12px 18px;
-            border-radius: 9px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-        }
-
-        .add-button:hover {
-            background: #c93213;
-        }
-
-        /* CONTENT */
-
-        .content {
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        /* MOBILE */
-
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 70px;
-                padding: 20px 10px;
-            }
-
-            .logo-text,
-            .menu-title,
-            .nav span {
-                display: none;
-            }
-
-            .logo {
-                justify-content: center;
-            }
-
-            .nav a {
-                justify-content: center;
-            }
-
-            .main {
-                margin-left: 70px;
-                width: calc(100% - 70px);
-                padding: 20px;
-            }
-        }
-    </style>
 </head>
 
 <body>
 
-<div class="app">
+<nav class="navbar">
 
-    <aside class="sidebar">
+    <div class="logo">
+        Personal Task Manager
+    </div>
 
-        <div class="logo">
-            <div class="logo-icon">✓</div>
+    <div>
 
-            <div class="logo-text">
-                Task Manager
-            </div>
+        <a
+            href="{{ route('tasks.index') }}"
+            class="nav-link"
+        >
+            Dashboard
+        </a>
+
+        <a
+            href="{{ route('tasks.create') }}"
+            class="nav-link"
+        >
+            Add Task
+        </a>
+
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+    @if(session('success'))
+
+        <div class="alert">
+            {{ session('success') }}
         </div>
 
-        <div class="menu-title">
-            Menu
-        </div>
+    @endif
 
-        <nav class="nav">
+    @yield('content')
 
-            <a href="{{ route('dashboard') }}"
-               class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                <div class="nav-icon">⌂</div>
-                <span>Dashboard</span>
-            </a>
+</main>
 
-            <a href="{{ route('tasks.create') }}"
-               class="{{ request()->routeIs('tasks.create') ? 'active' : '' }}">
-                <div class="nav-icon">＋</div>
-                <span>Add Task</span>
-            </a>
-
-            <a href="{{ route('tasks.index') }}"
-               class="{{ request()->routeIs('tasks.index') ? 'active' : '' }}">
-                <div class="nav-icon">☷</div>
-                <span>Tasks</span>
-            </a>
-
-        </nav>
-
-    </aside>
-
-    <main class="main">
-
-        <div class="content">
-            @yield('content')
-        </div>
-
-    </main>
-
-</div>
 
 </body>
 </html>
